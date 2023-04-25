@@ -500,6 +500,60 @@ img {
   display: block;
 }
 
+.graph1 {
+  margin-top: 30px;
+  margin-left: 50px;
+  margin-right: 50px;
+  font-size: x-large;
+}
+
+.graph2 {
+  margin-top: 30px;
+  margin-left: 50px;
+  margin-right: 50px;
+  font-size: large;
+}
+
+.graph3 {
+  margin-top: 30px;
+  margin-left: auto;
+  width: 75%;
+  font-size: medium;
+}
+
+.graph4 {
+  margin-top: 10px;
+  margin-left: auto;
+  width: 75%;
+  font-size: small;
+}
+
+.Login {
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 50px;
+  margin-bottom: 5px;
+  font-size: medium;
+}
+
+.Login1 {
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  font-size: large;
+  text-align: center;
+}
+
+.img {
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+.button-size {
+  padding: 5px 5px 5px;
+}
+
 .uploadfile {
   margin: auto;
   text-align: center;
