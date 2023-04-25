@@ -30,9 +30,20 @@ def signup():
         email = request.form['signup-email']
         password = request.form['signup-password']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute("""INSERT INTO user VALUES(%s,%s,%s,%s)""",(user_id,username,email,password,))
-        mysql.connection.commit()
-        msg="You have successfully signed up"
+        cursor.execute("SELECT * FROM user WHERE user_email = %s", (email,))
+        account= cursor.fetchone()
+        if account:
+            msg = 'Account already exists'
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+',email):
+            msg = 'Invalid email address'
+        elif not re.match(r'[^A-Za-z0-9]+', username):
+            msg = 'Username must contain only characters and numbers'
+        elif not username or not password or not email:
+            msg = 'Please fill out the form'
+        else:
+            cursor.execute("""INSERT INTO user VALUES(%s,%s,%s,%s)""",(user_id,username,email,password,))
+            mysql.connection.commit()
+            msg="You have successfully signed up"
         cursor.close()
         return render_template('loginManpro.html', msg=msg)
 @app.route('/login', methods = ['GET','POST'])
@@ -58,4 +69,9 @@ def logout():
     session.pop('user_id', None)
     session.pop('user_name', None)
     return(redirect('/form'))
+@app.route('/home')
+def home():
+    if 'loggedin' in session:
+        return render_template('home.html', username = session['user_name'])
+    return redirect('/form')
 app.run(host='localhost', port=5000)
