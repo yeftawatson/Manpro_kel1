@@ -514,6 +514,21 @@ img {
   font-size: large;
 }
 
+.graph2-1 {
+  margin-top: 30px;
+  margin-left: 50px;
+  margin-right: 50px;
+  font-size: medium;
+}
+
+.graph2-2 {
+  margin-top: 10px;
+  margin-left: 50px;
+  margin-right: 50px;
+  font-size: medium;
+}
+
+
 .graph3 {
   margin-top: 30px;
   margin-left: auto;
