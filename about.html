@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>About Us Plagiatize</title>
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <a href="index.html"><img src="asset/logoPlagiatize.png" alt="logo"></a>
+        </div>
+        <div class="toggle">
+            <a href="#"><ion-icon name="menu-outline"></ion-icon></a>
+        </div>
+        <ul class="menu">
+            <li><a class="contact" href="contact.html">Contact</a></li>
+            <li><a class="signin" href="#login">Sign In</a></li>
+            <li><a class="signup" href="#register">Sign Up</a></li>
+        </ul>
+    </nav>
+
+    <div class="user-modal">
+        <div class="user-modal-container">
+            <ul class="switcher">
+                <li><a href="#login">Sign in</a></li>
+                <li><a href="#register">New account</a></li>
+            </ul>
+
+            <div id="login">
+                <form class="form">
+                    <p class="fieldset">
+                        <label class="image-replace email" for="signin-email">E-mail</label>
+                        <input class="full-width has-padding has-border" id="signin-email" type="email"
+                            placeholder="E-mail">
+                        <span class="error-message">An account with this email address does not exist!</span>
+                    </p>
+
+                    <p class="fieldset">
+                        <label class="image-replace password" for="signin-password">Password</label>
+                        <input class="full-width has-padding has-border" id="signin-password" type="password"
+                            placeholder="Password">
+                        <a href="#0" class="hide-password">Show</a>
+                        <span class="error-message">Wrong password! Try again.</span>
+                    </p>
+
+                    <p class="fieldset">
+                        <input type="checkbox" id="remember-me" checked>
+                        <label for="remember-me">Remember me</label>
+                    </p>
+
+                    <p class="fieldset">
+                        <input class="full-width" type="submit" value="Login">
+                    </p>
+                </form>
+
+                <p class="form-bottom-message"><a href="#0">Forgot your password?</a></p>
+                <a href="#0" class="close-form">Close</a>
+            </div>
+
+            <div id="signup">
+                <form class="form">
+                    <p class="fieldset">
+                        <label class="image-replace username" for="signup-username">Username</label>
+                        <input class="full-width has-padding has-border" id="signup-username" type="text"
+                            placeholder="Username">
+                        <span class="error-message">Your username can only contain numeric and alphabetic
+                            symbols!</span>
+                    </p>
+
+                    <p class="fieldset">
+                        <label class="image-replace email" for="signup-email">E-mail</label>
+                        <input class="full-width has-padding has-border" id="signup-email" type="email"
+                            placeholder="E-mail">
+                        <span class="error-message">Enter a valid email address!</span>
+                    </p>
+
+                    <p class="fieldset">
+                        <label class="image-replace password" for="signup-password">Password</label>
+                        <input class="full-width has-padding has-border" id="signup-password" type="password"
+                            placeholder="Password">
+                        <a href="#0" class="hide-password">Show</a>
+                        <span class="error-message">Your password has to be at least 6 characters long!</span>
+                    </p>
+
+                    <p class="fieldset">
+                        <input type="checkbox" id="accept-terms">
+                        <label for="accept-terms">I agree to the <a class="accept-terms" href="#0">Terms</a></label>
+                    </p>
+
+                    <p class="fieldset">
+                        <input class="full-width has-padding" type="submit" value="Create account">
+                    </p>
+                </form>
+
+                <!-- <a href="#0" class="cd-close-form">Close</a> -->
+            </div>
+
+            <div id="reset-password">
+                <p class="form-message">Lost your password? Please enter your email address.</br> You will receive a
+                    link to create a new password.</p>
+
+                <form class="form">
+                    <p class="fieldset">
+                        <label class="image-replace email" for="reset-email">E-mail</label>
+                        <input class="full-width has-padding has-border" id="reset-email" type="email"
+                            placeholder="E-mail">
+                        <span class="error-message">An account with this email does not exist!</span>
+                    </p>
+
+                    <p class="fieldset">
+                        <input class="full-width has-padding" type="submit" value="Reset password">
+                    </p>
+                </form>
+
+                <p class="form-bottom-message"><a href="#0">Back to log-in</a></p>
+            </div>
+            <a href="#0" class="close-form">Close</a>
+        </div>
+        
+    </div>
+
+    <div class="bgAbout">
+        <div class="about-section">
+            <h1>About Us Page</h1>
+            <p>This Is About Plagiatize, can check all your task, with the best accurate system</p>
+            <p>Resize the browser window to see that this page is responsive by the way.</p>
+          </div>
+          
+          <h2 style="text-align:center">Our Team</h2>
+          <div class="row">
+            <div class="column">
+              <div class="card">
+                <img src="asset/mintize.jpg" alt="Jane" style="width:100%">
+                <div class="container">
+                  <h2>Yefta Nathaniel Watson</h2>
+                  <p class="title">Back End</p>
+                  <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                  <p>c14200004@john.petra.ac.id</p>
+                  <p><button class="button">Contact</button></p>
+                </div>
+              </div>
+            </div>
+          
+            <div class="column">
+              <div class="card">
+                <img src="asset/mintize.jpg" alt="Mike" style="width:100%">
+                <div class="container">
+                  <h2>Azarya Kairosuttan</h2>
+                  <p class="title">Back End</p>
+                  <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                  <p>c14200004@john.petra.ac.id</p>
+                  <p><button class="button">Contact</button></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="column">
+              <div class="card">
+                <img src="asset/mintize.jpg" alt="John" style="width:100%">
+                <div class="container">
+                  <h2>Matius Ansell</h2>
+                  <p class="title">Front End</p>
+                  <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                  <p>c14200064@john.petra.ac.id</p>
+                  <p><button class="button">Contact</button></p>
+                </div>
+              </div>
+            </div>
+    
+            <div class="column">
+                <div class="card">
+                  <img src="asset/mintize.jpg" alt="John" style="width:100%">
+                  <div class="container">
+                    <h2>Ronaldo Gunawan</h2>
+                    <p class="title">Back End</p>
+                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                    <p>c14200064@john.petra.ac.id</p>
+                    <p><button class="button">Contact</button></p>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="column">
+                <div class="card">
+                  <img src="asset/mintize.jpg" alt="John" style="width:100%">
+                  <div class="container">
+                    <h2>Gregorius Sambirin</h2>
+                    <p class="title">UI UX Designer</p>
+                    <p>Some text that describes me lorem ipsum ipsum lorem.</p>
+                    <p>c14200064@john.petra.ac.id</p>
+                    <p><button class="button">Contact</button></p>
+                  </div>
+                </div>
+              </div>
+          </div>
+    </div>
+
+    
+
+
+    
+
+      <!-- chatbox -->
+    <div class="chatbox-wrapper">
+		<div class="chatbox-toggle">
+			<i class='bx bx-message-dots'></i>
+		</div>
+		<div class="chatbox-message-wrapper">
+			<div class="chatbox-message-header">
+				<div class="chatbox-message-profile">
+					<img src="asset/mintize.jpg" alt="" class="chatbox-message-image full">
+					<div>
+						<h4 class="chatbox-message-name">Mimintize</h4>
+						<p class="chatbox-message-status">online</p>
+					</div>
+				</div>
+				<div class="chatbox-message-dropdown">
+					<i class='bx bx-dots-vertical-rounded chatbox-message-dropdown-toggle'></i>
+					<ul class="chatbox-message-dropdown-menu">
+						<li>
+							<a href="#">Search</a>
+						</li>
+						<li>
+							<a href="#">Report</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="chatbox-message-content">
+				<h4 class="chatbox-message-no-message">You don't have message yet!</h4>
+				<!-- <div class="chatbox-message-item sent">
+					<span class="chatbox-message-item-text">
+						Lorem, ipsum, dolor sit amet consectetur adipisicing elit. Quod, fugiat?
+					</span>
+					<span class="chatbox-message-item-time">08:30</span>
+				</div>
+				<div class="chatbox-message-item received">
+					<span class="chatbox-message-item-text">
+						Lorem, ipsum, dolor sit amet consectetur adipisicing elit. Quod, fugiat?
+					</span>
+					<span class="chatbox-message-item-time">08:30</span>
+				</div> -->
+			</div>
+			<div class="chatbox-message-bottom">
+				<form action="#" class="chatbox-message-form">
+					<textarea rows="1" placeholder="Type message..." class="chatbox-message-input"></textarea>
+					<button type="submit" class="chatbox-message-submit"><i class='bx bx-send' ></i></button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+
+    <script src="script.js"></script>
+</body>
+</html>
