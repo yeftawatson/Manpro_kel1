@@ -8,7 +8,11 @@ from flask_mysqldb import MySQL
 from uuid import uuid4
 import MySQLdb.cursors
 import re
-app = Flask(__name__, static_folder="D:/Kuliah/Manpro/static")
+import io
+import nltk
+nltk.download('punkt')
+
+app = Flask(__name__, static_folder="D:/Kuliah/Development Manpro/static")
 
 app.secret_key="hehehayoapa"
 
@@ -104,6 +108,7 @@ def upload_file():
             cursor.execute("INSERT INTO document (document_id, user_id, doc_name, doc_content)VALUES (%s, %s, %s, %s)", (docid, session['user_id'], file.filename, docContent, ))
             mysql.connection.commit()
             flash('File uploaded successfully')
+            return(render_template('loginManpro.html'))
         else:
             flash('Please login to upload file')
     else:
@@ -119,41 +124,135 @@ def jaccard_similarity(list1, list2):
 def calculate_jaccard_similarity():
     # file1 = request.files['tes.docx']
     # file2 = request.files['tes2.docx']
-    document = Document('D:/MATERI KULIAH SUTAN/SEMESTER 6/MANPRO/tes.docx')
-    document2 = Document('D:/MATERI KULIAH SUTAN/SEMESTER 6/MANPRO/tes2.docx')
+    # doc_id1 = '9c798b43-1d9e-40db-9e7b-2d6144d81ded'
+    # doc_id2 = 'd1512997-78ad-4b91-a296-3afc57b35c19'
+    doc_id = '9c798b43-1d9e-40db-9e7b-2d6144d81ded'
 
-    paragraf_docx = ""
-    paragraf_docx2 = ""
-    for paragraph in document.paragraphs:
-        paragraf_docx += paragraph.text.lower()
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT doc_content FROM document WHERE document_id = %s", (doc_id,))
+    row = cursor.fetchone()
+
+    if row:
+        content1 = row[0]
+
+        # Perform the Jaccard similarity calculation
+        paragraf_docx = ""
+        arrResHash = []
+        for paragraph in Document(io.BytesIO(content1)).paragraphs:
+            paragraf_docx += paragraph.text.lower()
+
+        cursor.execute("SELECT document_id, doc_content FROM document WHERE document_id != %s", (doc_id,))
+        similarity_results = []
+        for row in cursor.fetchall():
+            content2 = row[1]
+            paragraf_docx2 = ""
+            for paragraph in Document(io.BytesIO(content2)).paragraphs:
+                paragraf_docx2 += paragraph.text.lower()
+
+            arrTeks = []
+            arrResHash = []
+            for i in sent_tokenize(paragraf_docx):
+                i = i.replace(" ", "")
+                arrTeks.append(i)
+                i = hashlib.sha256(i.encode())
+                i = i.hexdigest()
+                arrResHash.append(i)
+
+            arrTeks2 = []
+            arrResHash2 = []
+            for i in sent_tokenize(paragraf_docx2):
+                i = i.replace(" ", "")
+                arrTeks2.append(i)
+                i = hashlib.sha256(i.encode())
+                i = i.hexdigest()
+                arrResHash2.append(i)
+
+            result_jaccard = jaccard_similarity(arrResHash, arrResHash2) * 100
+            jaccard_dec = np.around(result_jaccard, decimals=4)
+            final_result = '{:.4f}%'.format(jaccard_dec)
+            similarity_results.append(f"Jaccard similarity with document ID {row[0]}: {final_result}")
+
+        return "\n".join(similarity_results)
+    else:
+        return 'Invalid document ID'
+    # cursor = mysql.connection.cursor()
+    # cursor.execute("SELECT doc_content FROM document WHERE document_id = %s", (doc_id1,))
+    # row1 = cursor.fetchone()
+    # cursor.execute("SELECT doc_content FROM document WHERE document_id = %s", (doc_id2,))
+    # row2 = cursor.fetchone()
+    # if row1 and row2:
+    #     content1 = row1[0]
+    #     content2 = row2[0]
+
+    #     # Perform the Jaccard similarity calculation
+    #     paragraf_docx1 = ""
+    #     arrResHash1 = []
+    #     for paragraph in Document(io.BytesIO(content1)).paragraphs:
+    #         paragraf_docx1 += paragraph.text.lower()
+    #         arrTeks = []
+    #         arrResHash1 = []
+    #         for i in sent_tokenize(paragraf_docx1):
+    #             i = i.replace(" ", "")
+    #             arrTeks.append(i)
+    #             i = hashlib.sha256(i.encode())
+    #             i = i.hexdigest()
+    #             arrResHash1.append(i)
+
+    #     paragraf_docx2 = ""
+    #     arrResHash2 = []
+    #     for paragraph in Document(io.BytesIO(content2)).paragraphs:
+    #         paragraf_docx2 += paragraph.text.lower()
+    #         arrTeks2 = []
+    #         arrResHash2 = []
+    #         for i in sent_tokenize(paragraf_docx2):
+    #             i = i.replace(" ", "")
+    #             arrTeks2.append(i)
+    #             i = hashlib.sha256(i.encode())
+    #             i = i.hexdigest()
+    #             arrResHash2.append(i)
+
+    #     result_jaccard = jaccard_similarity(arrResHash1, arrResHash2) * 100
+    #     jaccard_dec = np.around(result_jaccard, decimals=4)
+    #     final_result = '{:.4f}%'.format(jaccard_dec)
+
+    #     return jsonify({'result': final_result, 'arr1': arrResHash1, 'arr2': arrResHash2})
+    # else:
+    #     return 'Invalid document IDs'
+    # document = Document('D:/MATERI KULIAH SUTAN/SEMESTER 6/MANPRO/tes.docx')
+    # document2 = Document('D:/MATERI KULIAH SUTAN/SEMESTER 6/MANPRO/tes2.docx')
+
+    # paragraf_docx = ""
+    # paragraf_docx2 = ""
+    # for paragraph in document.paragraphs:
+    #     paragraf_docx += paragraph.text.lower()
    
-    for paraf in document2.paragraphs:
-        paragraf_docx2 += paraf.text.lower()
+    # for paraf in document2.paragraphs:
+    #     paragraf_docx2 += paraf.text.lower()
 
-    arrTeks = []
-    arrResHash = []
-    for i in sent_tokenize(paragraf_docx):
-        i = i.replace(" ", "")
-        arrTeks.append(i)
-        i = hashlib.sha256(i.encode())
-        i = i.hexdigest()
-        arrResHash.append(i)
+    # arrTeks = []
+    # arrResHash = []
+    # for i in sent_tokenize(paragraf_docx):
+    #     i = i.replace(" ", "")
+    #     arrTeks.append(i)
+    #     i = hashlib.sha256(i.encode())
+    #     i = i.hexdigest()
+    #     arrResHash.append(i)
 
-    arrTeks2 = []
-    arrResHash2 = []
-    for i in sent_tokenize(paragraf_docx2):
-        i = i.replace(" ", "")
-        arrTeks2.append(i)
-        i = hashlib.sha256(i.encode())
-        i = i.hexdigest()
-        arrResHash2.append(i)
+    # arrTeks2 = []
+    # arrResHash2 = []
+    # for i in sent_tokenize(paragraf_docx2):
+    #     i = i.replace(" ", "")
+    #     arrTeks2.append(i)
+    #     i = hashlib.sha256(i.encode())
+    #     i = i.hexdigest()
+    #     arrResHash2.append(i)
 
-    result_jaccard = jaccard_similarity(arrResHash, arrResHash2) * 100
-    jaccard_dec = np.around(result_jaccard, decimals=4)
-    # final_result = np.char.mod('%.4f%%', jaccard_dec)
+    # result_jaccard = jaccard_similarity(arrResHash, arrResHash2) * 100
+    # jaccard_dec = np.around(result_jaccard, decimals=4)
+    # # final_result = np.char.mod('%.4f%%', jaccard_dec)
 
-    final_result = '{:.4f}%'.format(jaccard_dec)
-    return jsonify({'result': final_result})
+    # final_result = '{:.4f}%'.format(jaccard_dec)
+    # return jsonify({'result': final_result})
 app.run(host='localhost', port=5000)
 
 
