@@ -26,7 +26,7 @@
     </nav>
 
     <div class="user-modal">
-        <div class="user-modal-container">
+        <div class="user-modal-container" style="background-image: url(Background.png); background-position: center; background-repeat: no-repeat; background-size: cover;">
             <ul class="switcher">
                 <li><a href="#login">Sign in</a></li>
                 <li><a href="#register">New account</a></li>
@@ -34,6 +34,8 @@
 
             <div id="login">
                 <form class="form">
+                    <p style="text-align: center;font-size: 20px;padding-top: 5px;padding-bottom: 5px"><b>Login</b></p>
+                    <p style="padding-top: 5px;padding-bottom: 5px"><b>Email :</b></p>
                     <p class="fieldset">
                         <label class="image-replace email" for="signin-email">E-mail</label>
                         <input class="full-width has-padding has-border" id="signin-email" type="email"
@@ -41,6 +43,7 @@
                         <span class="error-message">An account with this email address does not exist!</span>
                     </p>
 
+                    <p style="padding-top: 5px;padding-bottom: 5px"><b>Password :</b></p>
                     <p class="fieldset">
                         <label class="image-replace password" for="signin-password">Password</label>
                         <input class="full-width has-padding has-border" id="signin-password" type="password"
@@ -60,11 +63,13 @@
                 </form>
 
                 <p class="form-bottom-message"><a href="#0">Forgot your password?</a></p>
-                <a href="#0" class="close-form">Close</a>
+                <!-- <a href="#0" class="close-form">Close</a> -->
             </div>
 
             <div id="signup">
                 <form class="form">
+                    <p style="text-align: center;font-size: 20px;padding-top: 5px;padding-bottom: 5px"><b>Create New Account</b></p>
+                    <p style="padding-top: 5px;padding-bottom: 5px"><b>Username :</b></p>
                     <p class="fieldset">
                         <label class="image-replace username" for="signup-username">Username</label>
                         <input class="full-width has-padding has-border" id="signup-username" type="text"
@@ -73,6 +78,7 @@
                             symbols!</span>
                     </p>
 
+                    <p style="padding-top: 5px;padding-bottom: 5px"><b>Email :</b></p>
                     <p class="fieldset">
                         <label class="image-replace email" for="signup-email">E-mail</label>
                         <input class="full-width has-padding has-border" id="signup-email" type="email"
@@ -80,6 +86,7 @@
                         <span class="error-message">Enter a valid email address!</span>
                     </p>
 
+                    <p style="padding-top: 5px;padding-bottom: 5px"><b>Password :</b></p>
                     <p class="fieldset">
                         <label class="image-replace password" for="signup-password">Password</label>
                         <input class="full-width has-padding has-border" id="signup-password" type="password"
@@ -122,6 +129,8 @@
             </div>
             <a href="#0" class="close-form">Close</a>
         </div>
+        
+    </div>
             
     </div class="bgAbout">
         <div class="conttt">

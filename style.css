@@ -526,12 +526,13 @@ nav a:hover {
     }
   
     .backgroundimage {
-      background-image: url("asset/pat1.png");
+      background-image: url("pileofbooks1.jpg");
       width: 100vw;
       height: 100vh; 
-      background-size: 100% 100%;
+      background-size: 100% 70%;
       background-repeat: no-repeat;
-      } 
+    
+    }
     
     /* chatbox */
     /* Box sizing rules */
@@ -895,6 +896,93 @@ select {
       height: 100%; 
       background-size: 100% 100%;
       background-repeat: no-repeat;
+  }
+
+  .popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  .popup .popuptext {
+    visibility: hidden;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
+  }
+  
+  .popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+  
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
+
+  .white-box {
+    background-color: white;
+    color: white;
+    opacity: 0.80;
+    height: 50%;
+    width: 60%;
+    padding: 20px;
+    padding-bottom: 10%;
+    margin-bottom: 5%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .blue-box {
+    background-color: #30475e;
+    color: white;
+    height: 5%;
+    width: 60%;
+    padding: 2px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .left, .right {
+    flex: 1;
   }
 
   /* contact.html */
