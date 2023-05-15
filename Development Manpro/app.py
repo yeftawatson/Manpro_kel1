@@ -1,5 +1,6 @@
 from flask import Flask,render_template, request, redirect, url_for, session, flash, jsonify
-from nltk.tokenize import sent_tokenize
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
 import hashlib
 import numpy as np
@@ -10,7 +11,9 @@ import MySQLdb.cursors
 import re
 import io
 import nltk
-nltk.download('punkt')
+import pdfplumber
+
+nltk.download('wordnet')
 
 app = Flask(__name__, static_folder="D:/Kuliah/Development Manpro/static")
 
@@ -113,12 +116,30 @@ def upload_file():
             flash('Please login to upload file')
     else:
         return 'Invalid file type'
-def jaccard_similarity(list1, list2):
-    set1 = set(list1)
-    set2 = set(list2)
-    intersection = set1.intersection(set2)
-    union = set1.union(set2)
-    return len(intersection) / len(union)
+def jaccard_similarity(set1, set2):
+    intersection = len(set1.intersection(set2))
+    union = len(set1.union(set2))
+    return intersection / union
+def preprocess_sentences(text):
+    # Replace \n characters with a space
+    text = text.replace('\n', ' ')
+
+    # Remove extra spaces between words
+    text = re.sub(' +', ' ', text)
+
+    # Remove trailing punctuation marks
+    text = re.sub(r'[^\w\s]+$', '', text)
+
+    # Remove consecutive spaces between words and punctuation marks
+    text = re.sub(r'\s*([^\w\s])\s*', r' \1 ', text)
+
+    # Normalize spaces around punctuation
+    text = re.sub(r'\s([^\w\s])\s', r'\1 ', text)
+
+    # Remove leading and trailing whitespaces from each sentence
+    sentences = [sentence.strip() for sentence in text.split('.')]
+
+    return sentences
 
 @app.route('/jaccard_similarity', methods=['GET','POST'])
 def calculate_jaccard_similarity():
@@ -134,44 +155,60 @@ def calculate_jaccard_similarity():
 
     if row:
         content1 = row[0]
-
-        # Perform the Jaccard similarity calculation
-        paragraf_docx = ""
-        arrResHash = []
-        for paragraph in Document(io.BytesIO(content1)).paragraphs:
-            paragraf_docx += paragraph.text.lower()
+        if content1.startswith(b'%PDF'):
+            pdf = pdfplumber.open(io.BytesIO(content1))
+            extracted_text = ""
+            for page in pdf.pages:
+                extracted_text += page.extract_text()
+            paragraf_docx = extracted_text.lower()
+        else:
+            paragraf_docx = ""
+            document = Document(io.BytesIO(content1))
+            for paragraph in document.paragraphs:
+                paragraf_docx += paragraph.text.lower()
+            print(paragraf_docx)
 
         cursor.execute("SELECT document_id, doc_content FROM document WHERE document_id != %s", (doc_id,))
         similarity_results = []
         for row in cursor.fetchall():
             content2 = row[1]
-            paragraf_docx2 = ""
-            for paragraph in Document(io.BytesIO(content2)).paragraphs:
-                paragraf_docx2 += paragraph.text.lower()
-
-            arrTeks = []
-            arrResHash = []
-            for i in sent_tokenize(paragraf_docx):
-                i = i.replace(" ", "")
-                arrTeks.append(i)
-                i = hashlib.sha256(i.encode())
-                i = i.hexdigest()
-                arrResHash.append(i)
-
-            arrTeks2 = []
-            arrResHash2 = []
-            for i in sent_tokenize(paragraf_docx2):
-                i = i.replace(" ", "")
-                arrTeks2.append(i)
-                i = hashlib.sha256(i.encode())
-                i = i.hexdigest()
-                arrResHash2.append(i)
+            if content2.startswith(b'%PDF'):
+                pdf = pdfplumber.open(io.BytesIO(content2))
+                extracted_text = ""
+                for page in pdf.pages:
+                    extracted_text += page.extract_text()
+                paragraf_docx2 = extracted_text.lower()
+                print(paragraf_docx2)
+            else:
+                paragraf_docx2 = ""
+                document = Document(io.BytesIO(content2))
+                for paragraph in document.paragraphs:
+                    paragraf_docx2 += paragraph.text.lower()
+            sentences1 = preprocess_sentences(paragraf_docx)
+            sentences2 = preprocess_sentences(paragraf_docx2)
+            arrteks=[]
+            arrteks2=[]
+            arrResHash = set()
+            for sentence in sentences1:
+                arrteks.append(sentence)
+                sentence_hash = hashlib.sha256(sentence.encode()).hexdigest()
+                arrResHash.add(sentence_hash)
+            
+            arrResHash2 = set()
+            for sentence in sentences2:
+                arrteks2.append(sentence)
+                sentence_hash = hashlib.sha256(sentence.encode()).hexdigest()
+                arrResHash2.add(sentence_hash)
 
             result_jaccard = jaccard_similarity(arrResHash, arrResHash2) * 100
             jaccard_dec = np.around(result_jaccard, decimals=4)
             final_result = '{:.4f}%'.format(jaccard_dec)
+            
             similarity_results.append(f"Jaccard similarity with document ID {row[0]}: {final_result}")
-
+            print("arr1")
+            print(sentences1)
+            print("arr2")
+            print (sentences2)
         return "\n".join(similarity_results)
     else:
         return 'Invalid document ID'
