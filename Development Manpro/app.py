@@ -9,8 +9,10 @@ from flask_mysqldb import MySQL
 from uuid import uuid4
 import MySQLdb.cursors
 import re
+import cv2
 import io
 import nltk
+import imghdr
 import pdfplumber
 
 nltk.download('wordnet')
@@ -155,6 +157,8 @@ def calculate_jaccard_similarity():
 
     if row:
         content1 = row[0]
+        if imghdr.what(None, h=content1) is not None:
+            return 'Invalid document type'
         if content1.startswith(b'%PDF'):
             pdf = pdfplumber.open(io.BytesIO(content1))
             extracted_text = ""
@@ -172,6 +176,8 @@ def calculate_jaccard_similarity():
         similarity_results = []
         for row in cursor.fetchall():
             content2 = row[1]
+            if imghdr.what(None, h=content2) is not None:
+                continue
             if content2.startswith(b'%PDF'):
                 pdf = pdfplumber.open(io.BytesIO(content2))
                 extracted_text = ""
@@ -209,7 +215,7 @@ def calculate_jaccard_similarity():
             print(sentences1)
             print("arr2")
             print (sentences2)
-        return "\n".join(similarity_results)
+        return "<br>".join(similarity_results)
     else:
         return 'Invalid document ID'
     # cursor = mysql.connection.cursor()
@@ -290,6 +296,63 @@ def calculate_jaccard_similarity():
 
     # final_result = '{:.4f}%'.format(jaccard_dec)
     # return jsonify({'result': final_result})
+
+@app.route('/compare_images', methods=['GET','POST'])
+def compare_images():
+    doc_id='c72f6dc3-21d7-4092-bae0-f84e333e5c5e'
+    # Retrieve the image blobs from the database
+    cursor = mysql.connection.cursor()
+    cursor.execute("SELECT doc_content,doc_name FROM document WHERE document_id!=%s", (doc_id,))
+    rows = cursor.fetchall()
+
+    results = []
+
+    # Load the image to compare
+    cursor.execute("SELECT doc_content FROM document WHERE document_id=%s", (doc_id,))
+    img_to_compare_blob = cursor.fetchone()[0]
+
+    # Convert the blob data to a NumPy array
+    nparr = np.frombuffer(img_to_compare_blob, np.uint8)
+
+    # Decode the NumPy array as an image
+    img_to_compare = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+    # Convert the image to grayscale
+    gray_img_to_compare = cv2.cvtColor(img_to_compare, cv2.COLOR_BGR2GRAY)
+
+    # Calculate the histogram of the image to compare
+    hist_to_compare = cv2.calcHist([gray_img_to_compare], [0], None, [256], [0, 256])
+    cv2.normalize(hist_to_compare, hist_to_compare, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
+
+    # Loop through each row in the database
+    for row in rows:
+        blob_data = row[0]
+
+        if imghdr.what(None, h=blob_data) is not None:
+            # Convert the blob data to a NumPy array
+            nparr = np.frombuffer(blob_data, np.uint8)
+
+            # Decode the NumPy array as an image
+            dataset_img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+            # Convert the dataset image to grayscale
+            gray_dataset_img = cv2.cvtColor(dataset_img, cv2.COLOR_BGR2GRAY)
+
+            # Calculate the histogram of the dataset image
+            hist_dataset_img = cv2.calcHist([gray_dataset_img], [0], None, [256], [0, 256])
+            cv2.normalize(hist_dataset_img, hist_dataset_img, alpha=0, beta=1, norm_type=cv2.NORM_MINMAX)
+
+            # Compare the histograms of the two images
+            score = cv2.compareHist(hist_to_compare, hist_dataset_img, cv2.HISTCMP_CORREL)
+
+            # Convert the score to a percentage
+            percentage_score = score * 100
+
+            # Append the percentage score to the results list
+            results.append(f"Image Similarity with Image name {row[1]}: {percentage_score:.2f}")
+    # Return the results as a response
+    return "<br>".join(results)
+
 app.run(host='localhost', port=5000)
 
 
