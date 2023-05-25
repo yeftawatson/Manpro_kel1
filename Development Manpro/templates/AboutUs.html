@@ -32,20 +32,19 @@
             </ul>
 
             <div id="login">
-                <form class="form">
+                <form class="form" action="{{url_for('login')}}" method="POST">
                     <p class="Login1"><b>Login</b></p>
                     <p class="Login"><b>Email :</b></p>
                     <p class="fieldset">
                         <label class="image-replace email" for="signin-email">E-mail</label>
-                        <input class="full-width has-padding has-border" id="signin-email" type="email"
+                        <input class="full-width has-padding has-border" name="signin-email" id="signin-email" type="text"
                             placeholder="E-mail">
                         <span class="error-message">An account with this email address does not exist!</span>
                     </p>
-
-                    <p class="Login"><b>Pasword :</b></p>
+                    <p class="Login"><b>Password :</b></p>
                     <p class="fieldset">
                         <label class="image-replace password" for="signin-password">Password</label>
-                        <input class="full-width has-padding has-border" id="signin-password" type="password"
+                        <input class="full-width has-padding has-border" name="signin-password" id="signin-password" type="password"
                             placeholder="Password">
                         <a href="#0" class="hide-password">Show</a>
                         <span class="error-message">Wrong password! Try again.</span>
@@ -55,7 +54,7 @@
                         <input type="checkbox" id="remember-me" checked>
                         <label for="remember-me">Remember me</label>
                     </p>
-
+                    <div class="msg">{{ msg }}</div>
                     <p class="fieldset">
                         <input class="full-width" type="submit" value="Login">
                     </p>
@@ -66,29 +65,27 @@
             </div>
 
             <div id="signup">
-                <form class="form">
+                <form class="form" action="{{ url_for('signup') }}" method="POST">
                     <p class="Login1"><b>Create New Account</b></p>
                     <p class="Login"><b>Username :</b></p>
                     <p class="fieldset">
                         <label class="image-replace username" for="signup-username">Username</label>
-                        <input class="full-width has-padding has-border" id="signup-username" type="text"
+                        <input class="full-width has-padding has-border" name="signup-username" id="signup-username" type="text"
                             placeholder="Username">
                         <span class="error-message">Your username can only contain numeric and alphabetic
                             symbols!</span>
                     </p>
-
                     <p class="Login"><b>Email :</b></p>
                     <p class="fieldset">
                         <label class="image-replace email" for="signup-email">E-mail</label>
-                        <input class="full-width has-padding has-border" id="signup-email" type="email"
+                        <input class="full-width has-padding has-border" name="signup-email" id="signup-email" type="email"
                             placeholder="E-mail">
                         <span class="error-message">Enter a valid email address!</span>
                     </p>
-
-                    <p class="Login"><b>Pasword :</b></p>
+                    <p class="Login"><b>Password :</b></p>
                     <p class="fieldset">
                         <label class="image-replace password" for="signup-password">Password</label>
-                        <input class="full-width has-padding has-border" id="signup-password" type="password"
+                        <input class="full-width has-padding has-border" name="signup-password" id="signup-password" type="password"
                             placeholder="Password">
                         <a href="#0" class="hide-password">Show</a>
                         <span class="error-message">Your password has to be at least 6 characters long!</span>
@@ -98,11 +95,13 @@
                         <input type="checkbox" id="accept-terms">
                         <label for="accept-terms">I agree to the <a class="accept-terms" href="#0">Terms</a></label>
                     </p>
+                    <div class="msg">{{ msg }}</div>
 
                     <p class="fieldset">
                         <input class="full-width has-padding" type="submit" value="Create account">
                     </p>
                 </form>
+
 
                 <!-- <a href="#0" class="cd-close-form">Close</a> -->
             </div>
